@@ -1,5 +1,5 @@
 from pathlib import Path
-FILENAME = "Genome Sequences/U5.fa"
+FILENAME = "../Genome Sequences/U5.fa"
 file_contents = Path(FILENAME).read_text()
 
 # PF way
