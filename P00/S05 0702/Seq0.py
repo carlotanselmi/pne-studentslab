@@ -24,7 +24,12 @@ def seq_len(seq):
 
 def seq_count_base(seq, base):
     sequence = seq_read_fasta(seq)
+    genes = ["ADA", "FXN", "U5"]
     bases = ["A", "C", "T", "G"]
-    for b in sequence:
+    for g in genes:
+        for b in bases:
+            f = seq + g + ".txt"
+            bases = seq.read(f)
+            total = seq.read(bases, b)
 
 
