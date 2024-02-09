@@ -32,4 +32,4 @@ def seq_count_base(seq, base):
             bases = seq.read(f)
             total = seq.read(bases, b)
 
-
+# tips
