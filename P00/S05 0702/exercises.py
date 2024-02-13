@@ -47,3 +47,7 @@ seq_count_base("../Genome Sequences/FXN.fa", "A")
 seq_count_base("../Genome Sequences/FXN.fa", "C")
 seq_count_base("../Genome Sequences/FXN.fa", "T")
 seq_count_base("../Genome Sequences/FXN.fa", "G")
+
+# Exercise 5:
+
+print("\n----EXERCISE 5----")
