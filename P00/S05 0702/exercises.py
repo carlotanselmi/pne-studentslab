@@ -1,7 +1,8 @@
+from Seq0 import *
+
 # Exercise 1:
 
 print("----EXERCISE 1----")
-from Seq0 import *
 # Asterisk to import everything from another file
 # Testing the seq_ping() function:
 seq_ping()

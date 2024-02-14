@@ -1,8 +1,10 @@
-# Exercise 1
+# Exercise 1:
+
 def seq_ping():
     print("OK")
 
-# Exercise 2
+# Exercise 2:
+
 def seq_read_fasta(filename):
     from pathlib import Path
     file_contents = Path(filename).read_text()
@@ -15,9 +17,11 @@ def seq_read_fasta(filename):
         seq += line.replace("\n", "")
     return seq
 
-# Exercise 3
+# Exercise 3:
+
 def seq_len(seq=None):
-    return len(seq)
+    seq_dna = seq_read_fasta(seq)
+    return len(seq_dna)
 
 # Exercise 4:
 
@@ -58,4 +62,14 @@ def seq_complement(seq):
 
 # Exercise 8:
 
-#def most_frequent_base(seq):
+def most_frequent_base(seq):
+    sequence = ""
+    for line in seq:
+        sequence += line.replace("\n", "")
+    dictionary = {"A": 0, "C": 0, "T": 0, "G": 0}
+    for e in sequence:
+        if e in dictionary:
+            dictionary[e] += 1
+    max_count = max(dictionary.values())
+    max_count_bases = [base for base, count in dictionary.items() if count == max_count]
+    print("Most frequent base:", max_count_bases)
