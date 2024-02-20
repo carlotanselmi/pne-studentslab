@@ -1,2 +1,2 @@
 from Seq0 import *
-# MAL
+seq_count_base("ATGCATCTACC", "C")
