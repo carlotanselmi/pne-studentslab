@@ -1,4 +1,5 @@
 from Seq0 import *
+print("\n---EXERCISE 5---\n")
 print("Gene U5:", seq_count("../Genome Sequences/U5.fa"))
 print("Gene ADA:", seq_count("../Genome Sequences/ADA.fa"))
 print("Gene FRAT1:", seq_count("../Genome Sequences/FRAT1.fa"))

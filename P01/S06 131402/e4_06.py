@@ -1,5 +1,8 @@
 import termcolor
+
+
 class Seq:
+
     def __init__(self, seq):
         bases = {'A', 'T', 'G', 'C'}
         for base in seq:
@@ -31,7 +34,6 @@ def generate_seqs(pattern, number):
         list_of_seq.append(Seq(new_seq))
         n += 1
     return list_of_seq
-
 
 
 seq_list1 = generate_seqs("A", 3)
