@@ -15,6 +15,7 @@ def seq_read_fasta(filename):
     first_line = file_contents.find("\n")
     seq_dna = file_contents[first_line:]
 
+
     seq = ""
     for line in seq_dna:
         seq += line.replace("\n", "")
@@ -24,7 +25,7 @@ def seq_read_fasta(filename):
 # Exercise 3:
 
 
-def seq_len(seq=None):
+def seq_len(seq):
     seq_dna = seq_read_fasta(seq)
     return len(seq_dna)
 
@@ -33,7 +34,7 @@ def seq_len(seq=None):
 
 
 def seq_count_base(sequence, base=None):
-    dictionary = {"A": 0, "C": 0, "T": 0, "G": 0}
+    dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
     for e in sequence:
         if e in dictionary:
             dictionary[e] += 1
@@ -44,34 +45,37 @@ def seq_count_base(sequence, base=None):
 
 
 def seq_count(seq):
+    seq_dna = seq_read_fasta(seq)
     sequence = ""
-    for line in seq:
+    for line in seq_dna:
         sequence += line.replace("\n", "")
-    dictionary = {"A": 0, "C": 0, "T": 0, "G": 0}
+    dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
     for e in sequence:
         if e in dictionary:
             dictionary[e] += 1
-    print(dictionary)
+    return dictionary
 
 
 # Exercise 6:
 
 
 def seq_reverse(seq, n):
-    final_seq = seq[:n][::-1]
-    return final_seq
+    seq_dna = seq_read_fasta(seq)
+    final_seq = seq_dna[:n][::-1]
+    print("Fragment:", seq_dna[:n], "\nReverse:", final_seq)
 
 
 # Exercise 7:
 
 
 def seq_complement(seq):
+    seq_dna = seq_read_fasta(seq)
     complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
     final_seq = ""
-    for e in seq:
+    for e in seq_dna:
         sequence_complement = ''.join([complement[e]])
         final_seq += sequence_complement
-    return final_seq
+    print("Fragment:", seq_dna[:20], "\nComplement:", final_seq[:20])
 
 
 # Exercise 8:
@@ -81,7 +85,7 @@ def most_frequent_base(seq):
     sequence = ""
     for line in seq:
         sequence += line.replace("\n", "")
-    dictionary = {"A": 0, "C": 0, "T": 0, "G": 0}
+    dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
     for e in sequence:
         if e in dictionary:
             dictionary[e] += 1
