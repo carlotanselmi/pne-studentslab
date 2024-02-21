@@ -13,11 +13,13 @@ class Seq:
     def len(self):
         return len(self.seq)
 
+
 def print_seqs(seq_list):
     n = 0
     for sequence in seq_list:
         print(f"Sequence {n}: (Length: {sequence.len()}) {sequence}")
         n += 1
+
 
 def generate_seqs(pattern, number):
     list_of_seq = []
@@ -28,7 +30,6 @@ def generate_seqs(pattern, number):
         list_of_seq.append(Seq(new_seq))
         n += 1
     return list_of_seq
-
 
 
 seq_list1 = generate_seqs("A", 3)

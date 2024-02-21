@@ -16,14 +16,11 @@ print(seq_read_fasta[:21])
 # Exercise 3:
 
 print("\n----EXERCISE 3----")
-print("Gene U5:")
-seq_len("../Genome Sequences/U5.fa")
-print("Gene ADA:")
-seq_len("../Genome Sequences/ADA.fa")
-print("Gene FRAT1:")
-seq_len("../Genome Sequences/FRAT1.fa")
-print("Gene FXN:")
-seq_len("../Genome Sequences/FXN.fa")
+print("Gene U5:", seq_len("../Genome Sequences/U5.fa"))
+print("Gene ADA:", seq_len("../Genome Sequences/ADA.fa"))
+print("Gene FRAT1:", seq_len("../Genome Sequences/FRAT1.fa"))
+print("Gene FXN:", seq_len("../Genome Sequences/FXN.fa"))
+
 
 # Exercise 4:
 
