@@ -15,7 +15,6 @@ def seq_read_fasta(filename):
     first_line = file_contents.find("\n")
     seq_dna = file_contents[first_line:]
 
-
     seq = ""
     for line in seq_dna:
         seq += line.replace("\n", "")

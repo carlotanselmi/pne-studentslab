@@ -1,5 +1,5 @@
 from Seq1 import *
-print("-----| Practice 1, Exercise 7 |------")
+print("-----| Practice 1, Exercise 8 |------")
 # -- Create a Null sequence
 s1 = Seq()
 # -- Create a valid sequence

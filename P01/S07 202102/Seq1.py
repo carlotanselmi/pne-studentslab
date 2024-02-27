@@ -69,3 +69,14 @@ class Seq:
             seq += line.replace("\n", "")
         self.seq = seq
 
+    def most_frequent_base(self):
+        sequence = ""
+        for line in self.seq:
+            sequence += line.replace("\n", "")
+        dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
+        for e in sequence:
+            if e in dictionary:
+                dictionary[e] += 1
+        max_count = max(dictionary.values())
+        max_count_bases = [base for base, count in dictionary.items() if count == max_count]
+        return ' '.join(max_count_bases)
