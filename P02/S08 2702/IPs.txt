@@ -1,3 +1,0 @@
-Machine         Interfase           Date            Place           IP
-mobile          Wifi                27/02/2024      Fuenlabrada Lab 10.4.11.49
-Lab computer    Wire                27/02/2024      Fuenlabrada Lab 212.128.255.84
