@@ -12,5 +12,6 @@ PORT = 8081
 # -- Create a client object
 c = Client(IP, PORT)
 
+# Preliminary test of the Client Class:
 # -- Test the ping method
 c.ping()
