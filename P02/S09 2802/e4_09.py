@@ -6,16 +6,17 @@ EXERCISE = 4
 
 print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
-IP = "212.128.255.40"
+IP = "212.128.255.84"
 PORT = 8081
 
 s = Seq()
 c = Client(IP, PORT)
-s.read_fasta('Genome Sequences/U5.fa')
+genome = "U5"
+s.read_fasta(f'Genome Sequences/{genome}.fa')
 
-print("To server: Sending U5 Gene to the server...")
-print("From server:", c.talk("To server: Sending U5 Gene to the server..."))
-print("To server:", str(s))
+print(f'To server: Sending {genome} Gene to the server...')
+print("From server:", c.talk(f"Sending {genome} Gene to the server..."))
+print(f'To server: {s}')
 print("From server:", c.talk(str(s)))
 
 
