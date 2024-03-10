@@ -2,7 +2,7 @@ import socket
 
 
 PORT = 8082
-IP = "212.128.255.84"
+IP = "127.0.0.1"
 MAX_OPEN_REQUESTS = 5
 
 number_con = 0
