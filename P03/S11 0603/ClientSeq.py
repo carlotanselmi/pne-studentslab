@@ -1,5 +1,4 @@
 import socket
-import random
 
 
 class Client:
@@ -46,4 +45,16 @@ class Client:
         percentages = {}
         for base, count in dictionary.items():
             percentages[base] = (count / length) * 100
-            print(f"{base}: {count} ({percentages[base]}%)")
+            print(f"{base}: {count} ({percentages[base]:.2f}%)")
+
+    def comp(self, seq):
+        complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
+        comp_seq = ""
+        for e in seq:
+            sequence_complement = ''.join([complement[e]])
+            comp_seq += sequence_complement
+        print(comp_seq)
+
+    def rev(self, seq):
+        rev_seq = seq[::-1]
+        print(rev_seq)

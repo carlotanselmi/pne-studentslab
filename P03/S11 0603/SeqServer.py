@@ -1,5 +1,5 @@
 import socket
-from Client0 import Client
+from ClientSeq import Client
 
 # Configure the Server's IP and PORT
 PORT = 8080
@@ -51,6 +51,7 @@ while True:
 
         # -- We decode it for converting it into a human-readable string
         msg = msg_raw.decode()
+        msg.upper()
 
         # -- Print the received message
         print(f"{msg} command")
@@ -58,12 +59,24 @@ while True:
         if msg == 'PING':
             response = c.ping()
 
-        if msg.startswith('GET'):
+        elif msg.startswith('GET'):
             number = int(msg.split()[1])
             response = c.get(number)
 
-        if msg.startswith('INFO'):
+        elif msg.startswith('INFO'):
+            sequence = msg.split()[1]
+            response = c.info(sequence)
 
+        elif msg.startswith('COMP'):
+            sequence = msg.split()[1]
+            response = c.comp(sequence)
+
+        elif msg.startswith('REV'):
+            sequence = msg.split()[1]
+            response = c.rev(sequence)
+
+        elif msg.startswith('GENE'):
+            genome_name = msg.split()[1]
 
         # -- The message has to be encoded into bytes
         cs.send(response.encode())
