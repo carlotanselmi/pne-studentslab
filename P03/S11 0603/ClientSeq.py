@@ -10,7 +10,7 @@ class Client:
         return f"Connection to SERVER at {self.ip}, PORT: {self.port}"
 
     def ping(self):
-        print("OK!\n")
+        return "OK!"
 
     def talk(self, msg):
         # -- Create the socket
@@ -32,29 +32,48 @@ class Client:
         return response
 
     def get(self, number):
-        dna_sequences = ["AAGCCTCGAGTCGAGACTGC", "GCTAGCTAGCGGTGGCATCG", "CGGGTAGCTCCGGACTAGCA", "TCGATCGATCGAGGTCGAGC"]
-        print(dna_sequences[number])
+        dna_sequences = ["AAGCCTCGAGTCGAGACTGC", "GCTAGCTAGCGGTGGCATCG", "CGGGTAGCTCCGGACTAGCA",
+                         "TCGATCGATCGAGGTCGAGC", "CACACAGTGACAGTCGTACG"]
+        return dna_sequences[number]
 
     def info(self, seq):
         length = len(seq)
-        print(f"Sequence: {seq}\nTotal length: {length}")
+        info_string = f"Sequence: {seq}\nTotal length: {length}\n"
         dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
+
         for e in seq:
             if e in dictionary:
                 dictionary[e] += 1
         percentages = {}
+
         for base, count in dictionary.items():
             percentages[base] = (count / length) * 100
-            print(f"{base}: {count} ({percentages[base]:.2f}%)")
+            info_string += f"{base}: {count} ({percentages[base]:.2f}%)"
+        return info_string
 
     def comp(self, seq):
         complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
         comp_seq = ""
+
         for e in seq:
             sequence_complement = ''.join([complement[e]])
             comp_seq += sequence_complement
-        print(comp_seq)
+        return comp_seq
 
     def rev(self, seq):
         rev_seq = seq[::-1]
-        print(rev_seq)
+        return rev_seq
+
+    def gene(self, filename):
+        from pathlib import Path
+        filename = f'Genome Sequences/{filename}.fa'
+        file_contents = Path(filename).read_text()
+
+        first_line = file_contents.find("\n")
+        seq_dna = file_contents[first_line:]
+
+        seq = ""
+        for line in seq_dna:
+            seq += line.replace("\n", "")
+        return seq
+

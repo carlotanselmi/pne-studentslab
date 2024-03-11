@@ -3,7 +3,7 @@ from ClientSeq import Client
 
 # Configure the Server's IP and PORT
 PORT = 8080
-IP = "127.0.0.1"  # this IP address is local, so only requests from the same machine are possible
+IP = "127.0.0.1"
 c = Client(IP, PORT)
 
 # -- Step 1: create the socket
@@ -58,28 +58,38 @@ while True:
 
         if msg == 'PING':
             response = c.ping()
+            cs.send(str(response).encode())
 
         elif msg.startswith('GET'):
             number = int(msg.split()[1])
             response = c.get(number)
+            cs.send(str(response).encode())
 
         elif msg.startswith('INFO'):
             sequence = msg.split()[1]
             response = c.info(sequence)
+            cs.send(str(response).encode())
 
         elif msg.startswith('COMP'):
             sequence = msg.split()[1]
             response = c.comp(sequence)
+            cs.send(str(response).encode())
 
         elif msg.startswith('REV'):
             sequence = msg.split()[1]
             response = c.rev(sequence)
+            cs.send(str(response).encode())
 
         elif msg.startswith('GENE'):
             genome_name = msg.split()[1]
+            if genome_name in ['U5', 'ADA', 'FRAT1', 'FXN', 'RNU6_269P']:
+                response = c.gene(genome_name)
+                cs.send(str(response).encode())
+            else:
+                print("There is NOT such Genome in the server")
 
-        # -- The message has to be encoded into bytes
-        cs.send(response.encode())
+        else:
+            print("Error with the command")
 
         # -- Close the socket
         cs.close()

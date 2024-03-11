@@ -1,4 +1,4 @@
-class Seq:
+ class Seq:
     def __init__(self, seq):
         bases = {'A', 'T', 'G', 'C'}
         dna_seq = ""

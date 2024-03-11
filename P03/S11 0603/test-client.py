@@ -1,82 +1,67 @@
 from ClientSeq import Client
-from Seq1 import Seq
 
 PRACTICE = 3
 EXERCISE = 7
 
-print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
+print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------\n")
 
 IP = "127.0.0.1"
 PORT = 8080
 
 c = Client(IP, PORT)
 
-print("* Testing PING...")
+print("* Testing PING...\n")
 message = 'PING'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 
-print("* Testing GET...")
+print("* Testing GET...\n")
 message = 'GET 2'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 message = 'GET 4'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 
-print("* Testing INFO...")
+print("* Testing INFO...\n")
 message = 'INFO ACCTCCTCTCCAGCAATGCCAA'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 
-print("* Testing COMP...")
+print("* Testing COMP...\n")
 message = 'COMP ACCTCCTCTCCAGCAATGCCAA'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 
-print("* Testing REV...")
+print("* Testing REV...\n")
 message = 'REV ACCTCCTCTCCAGCAATGCCAA'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
 
 print("* Testing GENE...")
-s = Seq()
-genome = "U5"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
-message = f'GENE {genome}'
+message = 'GENE U5'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
-genome = "ADA"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
-message = f'GENE {genome}'
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
+message = 'GENE ADA'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
-genome = "FRAT1"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
-message = f'GENE {genome}'
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
+message = 'GENE FRAT1'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
-genome = "FXN"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
-message = f'GENE {genome}'
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
+message = 'GENE FXN'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
-genome = "RNU6_269P"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
-message = f'GENE {genome}'
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
+message = 'GENE RNU6_269P'
 print(f'To server: {message}')
-# send_msg = c.talk(message)
-# print(f'From server: {send_msg}')
-
-
-
+send_msg = c.talk(message)
+print(f'From server: {send_msg}\n')
