@@ -1,12 +1,10 @@
 # Exercise 1:
 
-
 def seq_ping():
     print("OK")
 
 
 # Exercise 2:
-
 
 def seq_read_fasta(filename):
     from pathlib import Path
@@ -14,7 +12,6 @@ def seq_read_fasta(filename):
 
     first_line = file_contents.find("\n")
     seq_dna = file_contents[first_line:]
-
 
     seq = ""
     for line in seq_dna:
@@ -24,14 +21,12 @@ def seq_read_fasta(filename):
 
 # Exercise 3:
 
-
 def seq_len(seq):
     seq_dna = seq_read_fasta(seq)
     return len(seq_dna)
 
 
 # Exercise 4:
-
 
 def seq_count_base(sequence, base=None):
     dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
@@ -42,7 +37,6 @@ def seq_count_base(sequence, base=None):
 
 
 # Exercise 5:
-
 
 def seq_count(seq):
     seq_dna = seq_read_fasta(seq)
@@ -58,7 +52,6 @@ def seq_count(seq):
 
 # Exercise 6:
 
-
 def seq_reverse(seq, n):
     seq_dna = seq_read_fasta(seq)
     final_seq = seq_dna[:n][::-1]
@@ -66,7 +59,6 @@ def seq_reverse(seq, n):
 
 
 # Exercise 7:
-
 
 def seq_complement(seq):
     seq_dna = seq_read_fasta(seq)
@@ -79,7 +71,6 @@ def seq_complement(seq):
 
 
 # Exercise 8:
-
 
 def most_frequent_base(seq):
     sequence = ""

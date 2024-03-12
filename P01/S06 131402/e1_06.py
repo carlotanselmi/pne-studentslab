@@ -1,4 +1,4 @@
- class Seq:
+class Seq:
     def __init__(self, seq):
         bases = {'A', 'T', 'G', 'C'}
         dna_seq = ""
@@ -20,4 +20,3 @@ s1 = Seq("ACCTGC")
 s2 = Seq("Hello? Am I a valid sequence?")
 print(f"Sequence 1: {s1}")
 print(f"Sequence 2: {s2}")
-

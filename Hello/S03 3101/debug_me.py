@@ -15,7 +15,7 @@ def f(a, b, c, d):
 
 # -- Main program
 print("Result 1: ", f(5, 2, 5, 0))
-print("Result 2: ", f(0, 2, 3, 3))
+print("Result 2: ", f(0, 2, 3, 3))      # ZeroDivisionError: division by zero
 print("Result 3: ", f(1, 3, 2, 3))
 print("Result 4: ", f(1, 9, 22.0, 3))
 

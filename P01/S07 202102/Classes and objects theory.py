@@ -1,15 +1,16 @@
 class Car:
     def __init__(self, brand):  # From the class to define an object
         pass  # Doesn't do anything
+
     def speed(self):
         return 100
 
 
 # Self is the object itself
 mycar = Car("Renault")  # We don't have to name the self before brand, because it's the object before the dot
-mycar.speed()
+print(mycar.speed())
 yourcar = Car("Ferrari")
-yourcar.speed()
+print(yourcar.speed())
 
 
 class Car1:
@@ -17,12 +18,12 @@ class Car1:
     def __init__(self, brand):  # From the class to define an object
         self.car_brand = brand
         self.speed = 0  # We could also have put it on the init as speed=0
-        # brand += "TM"  # Works because brand is a local variable
+        # brand += " TM"  # Works because brand is a local variable
 
     def set_speed(self, speed):
         self.speed = speed
         # self.car_brand += " TM"
-        #  brand += "TM"  # DOESN'T work because brand is a local variable from another function
+        # brand += "TM"  # DOESN'T work because brand is a local variable from another function
 
     def get_speed(self):
         return self.speed
