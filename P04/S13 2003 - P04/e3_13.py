@@ -7,7 +7,7 @@ IP = "127.0.0.1"
 PORT = 8080
 
 
-def process_client(s):
+def process_client(s, list):
     # -- Receive the request message
     req_raw = s.recv(2000)
     req = req_raw.decode()
@@ -30,8 +30,14 @@ def process_client(s):
     # blank line
     # Body (content to send)
 
+    req = req_line.split(' ')
+    req_first = req[1]
     # This new contents are written in HTML language
-    body = Path("/home/alumnos/carlotaa/PycharmProjects/pne-studentslab/P04/html/A.html").read_text()
+    if req_first in list:
+        body = Path(f"/home/alumnos/carlotaa/PycharmProjects/pne-studentslab/P04/html/{req_first[-1]}.html").read_text()
+    else:
+        body = ""
+
     # -- Status line: We respond that everything is ok (200 code)
     status_line = "HTTP/1.1 200 OK\n"
 
@@ -74,7 +80,8 @@ while True:
     else:
 
         # Service the client
-        process_client(cs)
+        l = ["/info/A", "/info/C"]
+        process_client(cs, l)
 
         # -- Close the socket
         cs.close()
