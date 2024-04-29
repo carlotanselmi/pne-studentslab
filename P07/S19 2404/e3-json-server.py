@@ -1,15 +1,16 @@
 import http.server
 import socketserver
 import termcolor
-import jinja2 as j
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
 PORT = 8080
 
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 
+
+# Class with our Handler. It is a called derived from BaseHTTPRequestHandler
+# It means that our class inherits all his methods and properties
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -19,24 +20,27 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Print the request line
         termcolor.cprint(self.requestline, 'green', force_color=True)
 
-        path = urlparse(self.path).path
+        # -- Parse the path
+        # -- NOTE: self.path already contains the requested resource
+        list_resource = self.path.split('?')
+        resource = list_resource[0]
 
-        if path == "/" or path.startswith("/echo"):
-            if path == "/":
-                contents = Path('html/form-e1.html').read_text()
-            else:
-                query = urlparse(self.path).query
-                arguments = parse_qs(query)
-                message = arguments.get('msg', [''])[0]
-                contents = # photo
-
-
+        if resource == "/sequence/id":
+            # Read the file
+            contents = Path('/sequence/id').read_text()
+            content_type = 'application/json'
+            error_code = 200
+        else:
+            # Read the file
+            contents = Path('error.html').read_text()
+            content_type = 'text/html'
+            error_code = 404
 
         # Generating the response message
-        self.send_response(200)  # -- Status line: OK!
+        self.send_response(error_code)  # -- Status line: OK!
 
         # Define the content-type header:
-        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Type', content_type)
         self.send_header('Content-Length', len(str.encode(contents)))
 
         # The header is finished
@@ -47,20 +51,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         return
 
-    def read_html_file(filename):
-        contents = Path("html/" + filename).read_text()
-        contents = j.Template(contents)
-        return contents
-
-    contents = read_html_file("echo.html").render(context={"todisplay": text})  # provide a dictionary to build the form
-
 
 # ------------------------
 # - Server MAIN program
 # ------------------------
 # -- Set the new handler
-
-
 Handler = TestHandler
 
 # -- Open the socket server

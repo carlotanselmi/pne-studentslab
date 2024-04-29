@@ -1,18 +1,13 @@
-# -- Example of a client that uses the HTTP.client library
-# -- for requesting the main page from the server
 import http.client
-
 PORT = 8080
 SERVER = 'localhost'
 
 print(f"\nConnecting to server: {SERVER}:{PORT}\n")
-
-# Connect with the server
 conn = http.client.HTTPConnection(SERVER, PORT)
 
 # -- Send the request message, using the GET method.
 try:
-    conn.request("GET", "/listusers")
+    conn.request("GET", "/sequence/id")
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the Server")
     exit()
