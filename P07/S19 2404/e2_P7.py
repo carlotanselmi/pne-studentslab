@@ -10,5 +10,5 @@ print("Dictionary of genes")
 print(f"There are {len(genes)} in the dictionary:")
 
 for key, value in genes.items():
-      termcolor.cprint(f'{key}', "green", force_color=True, end="")
+      termcolor.cprint(key, "green", force_color=True, end="")
       print(f': --> {value}')

@@ -3,6 +3,7 @@ import socketserver
 import termcolor
 from pathlib import Path
 
+# Define the Server's port
 PORT = 8080
 
 # -- This is for preventing the error: "Port already in use"
@@ -20,34 +21,30 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Print the request line
         termcolor.cprint(self.requestline, 'green', force_color=True)
 
-        # -- Parse the path
-        # -- NOTE: self.path already contains the requested resource
-        list_resource = self.path.split('?')
-        resource = list_resource[0]
+        # Extract the path from the request
+        path = self.path.strip('/')
 
-        if resource == "/sequence/id":
-            # Read the file
-            contents = Path('/sequence/id').read_text()
-            content_type = 'application/json'
-            error_code = 200
-        else:
-            # Read the file
-            contents = Path('error.html').read_text()
-            content_type = 'text/html'
-            error_code = 404
+        # Set the default filename to error.html
+        filename = 'error.html'
+        status_code = 404
 
-        # Generating the response message
-        self.send_response(error_code)  # -- Status line: OK!
+        # Try to open the requested file
+        try:
+            with open(path, 'rb') as file:
+                contents = file.read()
+            filename = path
+            status_code = 200
+        except FileNotFoundError:
+            contents = b'File not found'
 
+        self.send_response(status_code)
         # Define the content-type header:
-        self.send_header('Content-Type', content_type)
-        self.send_header('Content-Length', len(str.encode(contents)))
-
+        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Length', len(contents))
         # The header is finished
         self.end_headers()
-
         # Send the response message
-        self.wfile.write(str.encode(contents))
+        self.wfile.write(contents)
 
         return
 

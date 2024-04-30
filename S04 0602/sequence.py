@@ -1,5 +1,5 @@
 from pathlib import Path
-FILENAME = "../Genome Sequences/ADA.fa"
+FILENAME = "Genome Sequences/ADA.fa"
 file_contents = Path(FILENAME).read_text()
 
 first_line = file_contents.find("\n")

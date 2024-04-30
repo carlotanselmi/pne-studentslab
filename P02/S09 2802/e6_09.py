@@ -6,7 +6,7 @@ EXERCISE = 6
 
 print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
-IP = "212.128.255.84"
+IP = "127.0.0.1"
 PORT1 = 8081
 PORT2 = 8082
 

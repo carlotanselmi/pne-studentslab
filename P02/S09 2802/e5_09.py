@@ -6,13 +6,13 @@ EXERCISE = 5
 
 print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
-IP = "212.128.255.84"
+IP = "127.0.0.1"
 PORT = 8081
 
 s = Seq()
 c = Client(IP, PORT)
 genome = "FRAT1"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
+s.read_fasta(f'../Genome Sequences/{genome}.fa')
 print(f"Gene {genome}: {s}")
 
 message = f'Sending {genome} Gene fragments to the server...'
