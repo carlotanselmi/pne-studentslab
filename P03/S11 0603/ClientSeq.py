@@ -66,7 +66,7 @@ class Client:
 
     def gene(self, filename):
         from pathlib import Path
-        filename = f'Genome Sequences/{filename}.fa'
+        filename = f'../Genome Sequences/{filename}.fa'
         file_contents = Path(filename).read_text()
 
         first_line = file_contents.find("\n")

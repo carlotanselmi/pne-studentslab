@@ -10,7 +10,7 @@ class Client:
         return f"Connection to SERVER at {self.ip}, PORT: {self.port}"
 
     def ping(self):
-        print("OK")
+        print("OK!\n")
 
     def talk(self, msg):
         # -- Create the socket
