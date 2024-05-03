@@ -25,26 +25,15 @@ print("Gene FXN:", seq_len("../Genome Sequences/FXN.fa"))
 # Exercise 4:
 
 print("\n----EXERCISE 4----\n")
+bases = ["A", "C", "G", "T"]
 print("Gene U5:")
-seq_count_base("../Genome Sequences/U5.fa", "A")
-seq_count_base("../Genome Sequences/U5.fa", "C")
-seq_count_base("../Genome Sequences/U5.fa", "T")
-seq_count_base("../Genome Sequences/U5.fa", "G")
+seq_count_base("../Genome Sequences/U5.fa", bases)
 print("Gene ADA:")
-seq_count_base("../Genome Sequences/ADA.fa", "A")
-seq_count_base("../Genome Sequences/ADA.fa", "C")
-seq_count_base("../Genome Sequences/ADA.fa", "T")
-seq_count_base("../Genome Sequences/ADA.fa", "G")
+seq_count_base("../Genome Sequences/ADA.fa", bases)
 print("Gene FRAT1:")
-seq_count_base("../Genome Sequences/FRAT1.fa", "A")
-seq_count_base("../Genome Sequences/FRAT1.fa", "C")
-seq_count_base("../Genome Sequences/FRAT1.fa", "T")
-seq_count_base("../Genome Sequences/FRAT1.fa", "G")
+seq_count_base("../Genome Sequences/FRAT1.fa", bases)
 print("Gene FXN:")
-seq_count_base("../Genome Sequences/FXN.fa", "A")
-seq_count_base("../Genome Sequences/FXN.fa", "C")
-seq_count_base("../Genome Sequences/FXN.fa", "T")
-seq_count_base("../Genome Sequences/FXN.fa", "G")
+seq_count_base("../Genome Sequences/FXN.fa", bases)
 
 # Exercise 5:
 

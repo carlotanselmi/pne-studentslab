@@ -28,12 +28,16 @@ def seq_len(seq):
 
 # Exercise 4:
 
-def seq_count_base(sequence, base=None):
+def seq_count_base(seq, base):
+    seq_dna = seq_read_fasta(seq)
     dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
-    for e in sequence:
-        if e in dictionary:
-            dictionary[e] += 1
-    return dictionary[base]
+    for e in seq_dna:
+        for b in base:
+            if e == b:
+                if e in dictionary:
+                    dictionary[e] += 1
+    for key, value in dictionary.items():
+        print(f"{key}: {value}")
 
 
 # Exercise 5:
