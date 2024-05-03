@@ -14,7 +14,7 @@ s = Seq()
 c1 = Client(IP, PORT1)
 c2 = Client(IP, PORT2)
 genome = "FRAT1"
-s.read_fasta(f'Genome Sequences/{genome}.fa')
+s.read_fasta(f'../Genome Sequences/{genome}.fa')
 print(f"Gene {genome}: {s}")
 
 message = f'Sending {genome} Gene fragments to the server...'
