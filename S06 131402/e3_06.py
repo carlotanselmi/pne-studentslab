@@ -1,11 +1,16 @@
 class Seq:
     def __init__(self, seq):
         bases = {'A', 'T', 'G', 'C'}
+        dna_seq = ""
         for base in seq:
             if base in bases:
+                dna_seq += base
                 self.seq = seq
-            else:
-                self.seq = "ERROR"
+        if len(dna_seq) == len(seq):
+            print("New sequence created!")
+        else:
+            self.seq = "ERROR"
+            print("ERROR!!")
 
     def __str__(self):
         return self.seq
@@ -25,7 +30,7 @@ def generate_seqs(pattern, number):
     list_of_seq = []
     new_seq = ""
     n = 1
-    while n < number:
+    while n <= number:
         new_seq += pattern
         list_of_seq.append(Seq(new_seq))
         n += 1
@@ -35,6 +40,7 @@ def generate_seqs(pattern, number):
 seq_list1 = generate_seqs("A", 3)
 seq_list2 = generate_seqs("AC", 5)
 
+print()
 print("List 1:")
 print_seqs(seq_list1)
 print()

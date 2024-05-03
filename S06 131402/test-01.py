@@ -1,4 +1,4 @@
-from Seq0_ import *
+from Seq0_S05_testing import *
 
 seq1 = "ATTCCCGGGG"
 
@@ -10,4 +10,3 @@ print(f"    A: {seq_count_base(seq1, 'A')}")
 print(f"    T: {seq_count_base(seq1, 'T')}")
 print(f"    C: {seq_count_base(seq1, 'C')}")
 print(f"    G: {seq_count_base(seq1, 'G')}")
-
