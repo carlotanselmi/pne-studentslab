@@ -51,7 +51,8 @@ while True:
 
         # -- We decode it for converting it into a human-readable string
         msg = msg_raw.decode()
-        msg.upper()
+        msg = msg.rstrip("\n")
+        msg = msg.upper()
 
         # -- Print the received message
         print(f"{msg} command")
