@@ -23,11 +23,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         if path == "/" or path.startswith("/echo"):
             if path == "/":
-                contents = Path('html/form-e1.html').read_text()
+                contents = Path('html/form-e2.html').read_text()
             else:
                 query = urlparse(self.path).query
                 arguments = parse_qs(query)
                 message = arguments.get('msg', [''])[0]
+                check = arguments.get('chk', [''])[0]
+                if check == 'on':
+                    message = message.upper()
                 contents = f"""<!DOCTYPE html>
                     <html lang="en">
                       <head>
