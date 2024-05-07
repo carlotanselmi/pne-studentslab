@@ -33,46 +33,13 @@ class Seq:
     def count_base(self, base):
         dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
         for e in self.seq:
-            if e in dictionary:
-                dictionary[e] += 1
-        return dictionary[base]
-
-    def count(self):
-        dictionary = {"A": 0, "T": 0, "C": 0, "G": 0}
-        for e in self.seq:
-            if e in dictionary:
-                dictionary[e] += 1
-        return dictionary
-
-    def reverse(self):
-        if self.seq != "ERROR" and self.seq != "NULL":
-            rev_seq = self.seq[::-1]
-            return rev_seq
-        else:
-            return self.seq
-
-    def complement(self):
-        if self.seq != "ERROR" and self.seq != "NULL":
-            complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
-            comp_seq = ""
-            for e in self.seq:
-                sequence_complement = ''.join([complement[e]])
-                comp_seq += sequence_complement
-            return comp_seq
-        else:
-            return self.seq
-
-    def read_fasta(self, filename):
-        from pathlib import Path
-        file_contents = Path(filename).read_text()
-
-        first_line = file_contents.find("\n")
-        seq_dna = file_contents[first_line:]
-
-        seq = ""
-        for line in seq_dna:
-            seq += line.replace("\n", "")
-        self.seq = seq
+            for b in base:
+                if e == b:
+                    if e in dictionary:
+                        dictionary[e] += 1
+        for key, value in dictionary.items():
+            percentage = round((value/len(self.seq)) * 100, 1)
+            print(f"{key}: {value}  ({percentage})%")
 
     def most_frequent_base(self):
         sequence = ""
@@ -87,12 +54,11 @@ class Seq:
         return ' '.join(max_count_bases)
 
 
-gene_name = input("Write the gene name: ")
+gene_name = input("Write the gene name: ").upper()
 
-gene = ['FRAT1', 'ADA', 'FXN', 'RNU6_269P', 'MIR633', 'TTTY4C', 'RBMY2YP', 'FGFR3', 'KDR', 'ANK2']
-id = ['ENSG00000165879', 'ENSG00000196839', 'ENSG00000165060', 'ENSG00000212379', 'ENSG00000207552', 'ENSG00000228296',
-      'ENSG00000227633', 'ENSG00000068078', 'ENSG00000128052', 'ENSG00000145362']
-genes = dict(zip(gene, id))
+genes = {'FRAT1': 'ENSG00000165879', 'ADA': 'ENSG00000196839', 'FXN': 'ENSG00000165060', 'RNU6_269P': 'ENSG00000212379',
+         'MIR633': 'ENSG00000207552', 'TTTY4C': 'ENSG00000228296', 'RBMY2YP': 'ENSG00000227633',
+         'FGFR3': 'ENSG00000068078', 'KDR': 'ENSG00000128052', 'ANK2': 'ENSG00000145362'}
 
 SERVER = "rest.ensembl.org"
 ENDPOINT = "/sequence/id"
@@ -117,9 +83,14 @@ data1 = r1.read().decode("utf-8")
 person = json.loads(data1)
 
 termcolor.cprint('Gene', 'green', force_color=True, end="")
-print(": MIR633")
+print(f": {gene_name}")
 termcolor.cprint('Description', 'green', force_color=True, end="")
 print(f': {person["desc"]}')
-termcolor.cprint('Bases', 'green', force_color=True, end="")
-print(f': {person ["seq"]}')
-
+sequence = person["seq"]
+sequence = Seq(sequence)
+termcolor.cprint('Total length', 'green', force_color=True, end="")
+print(f": {sequence.len()}")
+bases = ["A", "C", "G", "T"]
+sequence.count_base(bases)
+termcolor.cprint('Most frequent base', 'green', force_color=True, end="")
+print(f": {sequence.most_frequent_base()}")

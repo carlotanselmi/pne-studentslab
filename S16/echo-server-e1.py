@@ -1,7 +1,6 @@
 import http.server
 import socketserver
 import termcolor
-import jinja2 as j
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -9,6 +8,7 @@ PORT = 8080
 
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
+
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
@@ -28,9 +28,20 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 query = urlparse(self.path).query
                 arguments = parse_qs(query)
                 message = arguments.get('msg', [''])[0]
-                contents = # photo
-
-
+                contents = f"""<!DOCTYPE html>
+                    <html lang="en">
+                      <head>
+                        <meta charset="utf-8">
+                        <title>RESULT</title>
+                      </head>
+                      <body>
+                        <h1>Received message:</h1>
+                        <p>{message}</p>
+                        <a href="http://127.0.0.1:8080/">Main page</a>
+                      </body>
+                    </html>"""
+        else:
+            contents = Path('html/error.html').read_text()
 
         # Generating the response message
         self.send_response(200)  # -- Status line: OK!
@@ -46,13 +57,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(str.encode(contents))
 
         return
-
-    def read_html_file(filename):
-        contents = Path("html/" + filename).read_text()
-        contents = j.Template(contents)
-        return contents
-
-    contents = read_html_file("echo.html").render(context={"todisplay": text})  # provide a dictionary to build the form
 
 
 # ------------------------
