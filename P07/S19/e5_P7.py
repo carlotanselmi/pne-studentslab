@@ -54,43 +54,44 @@ class Seq:
         return ' '.join(max_count_bases)
 
 
-gene_name = input("Write the gene name: ").upper()
-
 genes = {'FRAT1': 'ENSG00000165879', 'ADA': 'ENSG00000196839', 'FXN': 'ENSG00000165060', 'RNU6_269P': 'ENSG00000212379',
          'MIR633': 'ENSG00000207552', 'TTTY4C': 'ENSG00000228296', 'RBMY2YP': 'ENSG00000227633',
          'FGFR3': 'ENSG00000068078', 'KDR': 'ENSG00000128052', 'ANK2': 'ENSG00000145362'}
 
-SERVER = "rest.ensembl.org"
-ENDPOINT = "/sequence/id"
-ID = f'/{genes.get(gene_name)}'
-PARAMS = "?content-type=application/json"
-URL = SERVER + ENDPOINT + ID + PARAMS
+for key, value in genes.items():
+    gene_name = key
 
-print(f"\nServer: {SERVER}\nURL: {URL}")
-conn = http.client.HTTPConnection(SERVER)
+    SERVER = "rest.ensembl.org"
+    ENDPOINT = "/sequence/id"
+    ID = f'/{genes.get(gene_name)}'
+    PARAMS = "?content-type=application/json"
+    URL = SERVER + ENDPOINT + ID + PARAMS
 
-try:
-    conn.request("GET", ENDPOINT + ID + PARAMS)
-except ConnectionRefusedError:
-    print("ERROR! Cannot connect to the Server")
-    exit()
+    print(f"\nServer: {SERVER}\nURL: {URL}")
+    conn = http.client.HTTPConnection(SERVER)
 
-r1 = conn.getresponse()
+    try:
+        conn.request("GET", ENDPOINT + ID + PARAMS)
+    except ConnectionRefusedError:
+        print("ERROR! Cannot connect to the Server")
+        exit()
 
-print(f"Response received!: {r1.status} {r1.reason}\n")
+    r1 = conn.getresponse()
 
-data1 = r1.read().decode("utf-8")
-person = json.loads(data1)
+    print(f"Response received!: {r1.status} {r1.reason}\n")
 
-termcolor.cprint('Gene', 'green', force_color=True, end="")
-print(f": {gene_name}")
-termcolor.cprint('Description', 'green', force_color=True, end="")
-print(f': {person["desc"]}')
-sequence = person["seq"]
-sequence = Seq(sequence)
-termcolor.cprint('Total length', 'green', force_color=True, end="")
-print(f": {sequence.len()}")
-bases = ["A", "C", "G", "T"]
-sequence.count_base(bases)
-termcolor.cprint('Most frequent base', 'green', force_color=True, end="")
-print(f": {sequence.most_frequent_base()}")
+    data1 = r1.read().decode("utf-8")
+    person = json.loads(data1)
+
+    termcolor.cprint('Gene', 'green', force_color=True, end="")
+    print(f": {gene_name}")
+    termcolor.cprint('Description', 'green', force_color=True, end="")
+    print(f': {person["desc"]}')
+    sequence = person["seq"]
+    sequence = Seq(sequence)
+    termcolor.cprint('Total length', 'green', force_color=True, end="")
+    print(f": {sequence.len()}")
+    bases = ["A", "C", "G", "T"]
+    sequence.count_base(bases)
+    termcolor.cprint('Most frequent base', 'green', force_color=True, end="")
+    print(f": {sequence.most_frequent_base()}")
