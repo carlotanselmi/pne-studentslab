@@ -2,12 +2,59 @@ import http.server
 import socketserver
 import termcolor
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+import jinja2 as j
+import http.client
+import json
+from SeqClass import Seq
 
-# Define the Server's port
 PORT = 8080
-
-# -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
+
+
+def c(ENDPOINT, extra_params=""):
+    SERVER = "rest.ensembl.org"
+    PARAMS = f"?{extra_params}content-type=application/json"
+
+    URL = SERVER + ENDPOINT + PARAMS
+    print(URL)
+    # Connect with the server
+    conn = http.client.HTTPConnection(SERVER)
+
+    # -- Send the request message, using the GET method
+    try:
+        conn.request("GET", ENDPOINT + PARAMS)
+    except ConnectionRefusedError:
+        print("ERROR! Cannot connect to the Server")
+        exit()
+
+    # -- Read the response message from the server
+    r1 = conn.getresponse()
+    # -- Print the status line
+    print(f"Response received!: {r1.status} {r1.reason}\n")
+
+    # -- Read the response's body
+    data1 = r1.read().decode("utf-8")
+    # -- Transform it into JSON format
+    response = json.loads(data1)
+    return response
+
+
+def read_html_file(filename):
+    contents = Path(filename).read_text()
+    contents = j.Template(contents)
+    return contents
+
+
+def get_geneID(gene_name):
+    endpoint = "/xrefs/symbol/homo_sapiens/" + gene_name
+    gene_info = c(endpoint)
+    id = ""
+    for e in gene_info:
+        if len(e.get("id")) == 15:
+            id = e.get("id")
+
+    return id
 
 
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
@@ -19,32 +66,147 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         in the HTTP protocol request"""
 
         # Print the request line
-        termcolor.cprint(self.requestline, 'green', force_color=True)
+        termcolor.cprint(self.requestline, 'green')
 
-        # Extract the path from the request
-        path = self.path.strip('/')
+        url_path = urlparse(self.path)
+        path = url_path.path
+        arguments = parse_qs(url_path.query)
+        json_requested = "json" in arguments and arguments["json"][0] == "1"
+        contents = ""
 
-        # Set the default filename to error.html
-        filename = 'error.html'
-        status_code = 404
+        if path == "/":
+            # Opens the main page
+            contents = Path('welcome.html').read_text()
+            # Generating the response message
+            self.send_response(200)  # -- Status line: OK!
 
-        # Try to open the requested file
-        try:
-            with open(path, 'rb') as file:
-                contents = file.read()
-            filename = path
-            status_code = 200
-        except FileNotFoundError:
-            contents = b'File not found'
+        else:
+            try:
+                if path == "/listSpecies":
+                    contents = read_html_file("listSpecies.html")
+                    endpoint = "/info/species"
+                    species = c(endpoint)
 
-        self.send_response(status_code)
+                    all_species = species["species"]
+                    limit = arguments.get("limit")
+                    if limit:
+                        limit = limit[0]
+                    else:
+                        limit = len(all_species)
+
+                    names = ""
+                    for i in range(int(limit)):
+                        specie = all_species[i]
+                        name = specie["display_name"]
+                        names += f"> {name}<br>"
+                    contents = contents.render(context={"all_species": len(all_species),
+                                                        "limit": limit, "names": names})
+                    # If the limit written by the user is not an integer: ValueError below
+
+                elif path == "/karyotype":
+                    contents = read_html_file("karyotype.html")
+                    species_name = arguments.get("species")[0]
+                    species_name = species_name.replace(" ", "_")
+                    endpoint = f"/info/assembly/{species_name}"
+                    species = c(endpoint)
+
+                    karyotype = species["karyotype"]
+                    names = ""
+                    for k in karyotype:
+                        names += f"> {k}<br>"
+                    contents = contents.render(context={"names": names})
+
+                elif path == "/chromosomeLength":
+                    contents = read_html_file("chromosome.html")
+                    species_name = arguments.get("species")[0].lower()
+                    species_name = species_name.replace(" ", "_")
+                    endpoint = f"/info/assembly/{species_name}"
+                    species = c(endpoint)
+
+                    chromo = arguments.get("chromosome")[0]
+                    top_level_region = species.get("top_level_region")
+                    length = 0
+                    for e in top_level_region:
+                        name = e.get("name")
+                        coord_system = e.get("coord_system")
+                        if coord_system == "chromosome" and name == chromo:
+                            length = e.get("length")
+                    contents = contents.render(context={"length": length})
+
+                elif path == "/geneSeq":
+                    contents = read_html_file("geneSeq.html")
+                    gene_name = arguments.get("gene")[0]
+                    id = get_geneID(gene_name)
+                    endpoint = f"/sequence/id/{id}"
+                    gene = c(endpoint)
+
+                    seq = gene["seq"]
+                    contents = contents.render(context={"gene": seq, "name": gene_name})
+
+                elif path == "/geneInfo":
+                    contents = read_html_file("geneInfo.html")
+                    gene_name = arguments.get("gene")[0]
+                    id = get_geneID(gene_name)
+                    endpoint = f"/lookup/id/{id}"
+                    info = c(endpoint)
+
+                    start = info.get("start")
+                    end = info.get("end")
+                    chromo = info.get("seq_region_name")
+                    length = int(end) - int(start) + 1
+                    contents = contents.render(context={"name": gene_name, "start": start, "end": end,
+                                                        "len": length, "id": id, "chromo": chromo})
+
+                elif path == "/geneCalc":
+                    contents = read_html_file("geneCalc.html")
+                    gene_name = arguments.get("gene")[0]
+                    id = get_geneID(gene_name)
+                    endpoint = f"/sequence/id/{id}"
+                    gene = c(endpoint)
+
+                    seq = gene["seq"]
+                    seq = Seq(seq)
+                    length = seq.len()
+                    bases = ["A", "C", "G", "T"]
+                    percentages = seq.count_base(bases)
+                    contents = contents.render(context={"len": length, "percentages": percentages, "name": gene_name})
+
+                elif path == "/geneList":
+                    contents = read_html_file("geneList.html")
+                    chromo = arguments.get("chromo")[0]
+                    start = arguments.get("start")[0]
+                    end = arguments.get("end")[0]
+                    endpoint = f"/overlap/region/human/{chromo}:{start}-{end}"
+                    extra_params = "feature=gene;feature=transcript;feature=cds;feature=exon;"
+                    region = c(endpoint, extra_params)
+
+                    list_genes = []
+                    for e in region:
+                        if e.get("feature_type") == "gene":
+                            if e.get("external_name"):
+                                list_genes.append(e.get("external_name"))
+                    if len(list_genes) == 0:
+                        names = "There are not genes in this region"
+                    else:
+                        names = ""
+                        for gene in list_genes:
+                            names += f"> {gene}<br>"
+                    contents = contents.render(context={"chromo": chromo, "start": start, "end": end, "genes": names})
+
+                self.send_response(200)
+
+            except (FileNotFoundError, ValueError, TypeError, IndexError, ConnectionRefusedError,
+                    KeyError, AttributeError):
+                contents = Path("error.html").read_text()
+                self.send_response(404)
+
         # Define the content-type header:
         self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', len(contents))
+        self.send_header('Content-Length', len(str.encode(contents)))
         # The header is finished
         self.end_headers()
         # Send the response message
-        self.wfile.write(contents)
+        self.wfile.write(str.encode(contents))
 
         return
 
@@ -57,7 +219,6 @@ Handler = TestHandler
 
 # -- Open the socket server
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
-
     print("Serving at PORT", PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
