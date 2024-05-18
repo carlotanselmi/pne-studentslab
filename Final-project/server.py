@@ -53,7 +53,6 @@ def get_geneID(gene_name):
     for e in gene_info:
         if len(e.get("id")) == 15:
             id = e.get("id")
-
     return id
 
 
@@ -66,7 +65,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         in the HTTP protocol request"""
 
         # Print the request line
-        termcolor.cprint(self.requestline, 'green')
+        termcolor.cprint(self.requestline, 'green', force_color=True)
 
         url_path = urlparse(self.path)
         path = url_path.path
@@ -114,7 +113,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     names = ""
                     for k in karyotype:
                         names += f"> {k}<br>"
-                    contents = contents.render(context={"names": names})
+                    contents = contents.render(context={"species": species_name, "names": names})
 
                 elif path == "/chromosomeLength":
                     contents = read_html_file("chromosome.html")
@@ -131,7 +130,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         coord_system = e.get("coord_system")
                         if coord_system == "chromosome" and name == chromo:
                             length = e.get("length")
-                    contents = contents.render(context={"length": length})
+                    contents = contents.render(context={"species": species_name, "chromo": chromo, "length": length})
 
                 elif path == "/geneSeq":
                     contents = read_html_file("geneSeq.html")
@@ -197,6 +196,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             except (FileNotFoundError, ValueError, TypeError, IndexError, ConnectionRefusedError,
                     KeyError, AttributeError):
+                # With any possible error we will get the ERROR page
                 contents = Path("error.html").read_text()
                 self.send_response(404)
 
