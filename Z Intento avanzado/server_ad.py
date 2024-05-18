@@ -12,12 +12,11 @@ PORT = 8080
 socketserver.TCPServer.allow_reuse_address = True
 
 
-def c(ENDPOINT, extra_params=""):
+def c(ENDPOINT, EXTRA_PARAMS=""):
     SERVER = "rest.ensembl.org"
-    PARAMS = f"?{extra_params}content-type=application/json"
+    PARAMS = f"?{EXTRA_PARAMS}content-type=application/json"
 
     URL = SERVER + ENDPOINT + PARAMS
-    print(URL)
     # Connect with the server
     conn = http.client.HTTPConnection(SERVER)
 
@@ -53,7 +52,6 @@ def get_geneID(gene_name):
     for e in gene_info:
         if len(e.get("id")) == 15:
             id = e.get("id")
-
     return id
 
 
@@ -66,12 +64,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         in the HTTP protocol request"""
 
         # Print the request line
-        termcolor.cprint(self.requestline, 'green')
+        termcolor.cprint(self.requestline, 'green', force_color=True)
 
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
-        json_requested = "json" in arguments and arguments["json"][0] == "1"
+
+        content_type = 'text/html'
+        json = False
+        if arguments.get("json") and arguments.get("json")[0] == "1":
+            json = True
+        if json:
+            content_type = 'application/json'
+
         contents = ""
 
         if path == "/":
@@ -83,7 +88,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         else:
             try:
                 if path == "/listSpecies":
-                    contents = read_html_file("listSpecies.html")
                     endpoint = "/info/species"
                     species = c(endpoint)
 
@@ -99,6 +103,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         specie = all_species[i]
                         name = specie["display_name"]
                         names += f"> {name}<br>"
+
+                    if json:
+                        contents = json.dumps({"all_species": names})
+                    else:
+                        contents = read_html_file("listSpecies.html")
+
                     contents = contents.render(context={"all_species": len(all_species),
                                                         "limit": limit, "names": names})
                     # If the limit written by the user is not an integer: ValueError below
@@ -114,7 +124,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     names = ""
                     for k in karyotype:
                         names += f"> {k}<br>"
-                    contents = contents.render(context={"names": names})
+                    contents = contents.render(context={"species": species_name, "names": names})
 
                 elif path == "/chromosomeLength":
                     contents = read_html_file("chromosome.html")
@@ -131,7 +141,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         coord_system = e.get("coord_system")
                         if coord_system == "chromosome" and name == chromo:
                             length = e.get("length")
-                    contents = contents.render(context={"length": length})
+                    contents = contents.render(context={"species": species_name, "chromo": chromo, "length": length})
 
                 elif path == "/geneSeq":
                     contents = read_html_file("geneSeq.html")
@@ -197,6 +207,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             except (FileNotFoundError, ValueError, TypeError, IndexError, ConnectionRefusedError,
                     KeyError, AttributeError):
+                # With any possible error we will get the ERROR page
                 contents = Path("error.html").read_text()
                 self.send_response(404)
 
