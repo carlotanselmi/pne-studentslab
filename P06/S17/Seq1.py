@@ -68,6 +68,7 @@ class Seq:
         for line in seq_dna:
             seq += line.replace("\n", "")
         self.seq = seq
+        return self.seq
 
     def most_frequent_base(self):
         sequence = ""
