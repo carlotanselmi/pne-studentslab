@@ -122,7 +122,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     endpoint = f"/info/assembly/{species_name}"
                     species = c(endpoint)
 
-                    chromo = arguments.get("chromosome")[0]
+                    chromo = arguments.get("chromo")[0]
                     top_level_region = species.get("top_level_region")
                     length = 0
                     for e in top_level_region:
